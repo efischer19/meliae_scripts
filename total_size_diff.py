@@ -15,4 +15,4 @@ with open(sys.argv[2]) as fp:
         parsed = json.loads(line)
         total[1] += parsed['size']
 
-print "{} had {} more than {}, in total.".format(sys.argv[1], total[0]-total[1], sys.argv[2])
+print "{} had {}, {} more than {}'s {}, in total.".format(sys.argv[1], total[0], total[0]-total[1], sys.argv[2], total[1])
