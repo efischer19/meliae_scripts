@@ -1,0 +1,16 @@
+# Files should be in the "import/" directory under your neo4j instance
+# I usually run these as separate commands, as they take a while
+
+//create nodes
+using periodic commit
+load csv with headers from "file:/nodes-meliae-bigproc-pre_gc.csv" as row
+create(a:block {address: row.address, type: row.type, size: row.size})
+foreach(temp in case when trim(row.name) <> "" THEN [1] ELSE [] END | SET a.name = row.name)
+foreach(temp in case when trim(row.name) <> "" THEN [1] ELSE [] END | SET a.value = row.value);
+
+//create relationships
+using periodic commit 100
+load csv with headers from "file:/rels-meliae-bigproc-pre_gc.csv" as row
+match (a:block {address: row.start})
+match (b:block {address: row.end})
+create (a)-[:refs]->(b);
